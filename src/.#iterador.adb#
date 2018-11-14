@@ -1,0 +1,61 @@
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar.Formatting; use Ada.Calendar.Formatting;
+with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
+package body iterador is
+
+   
+      --COMBINACIONES NO IMPORTA EL ORDEN SIN REPETICION
+
+   function recepcionCombinaciones (Tiempo : Boolean; Fichero : String) return array_Vector is    
+      F_Entrada         : File_Type;
+      Línea             : String(1..1);
+      Lon_Línea         : Natural;
+
+      Vector : array_Vector := (others => 0);
+      Con : Integer := 1;   
+      Start_Time  : Time;
+      
+      
+   begin
+      
+      --activo reloj si corresponde
+      if Tiempo then
+         Start_Time := Clock;
+      end if;
+      
+      --se abren los ficheros
+      Open(F_Entrada,Mode => In_File,Name => Fichero);
+
+
+      
+
+      while not End_Of_File(F_Entrada) loop
+         Get_Line(F_Entrada,Línea,Lon_Línea);
+
+         if Línea(1..Lon_Línea) /= " " then
+            Vector(Con) := integer'Value(Línea(1..Lon_Línea));
+            Put_Line(Línea(1..Lon_Línea));
+            Con := Con + 1;
+         end if;
+
+      end loop;
+
+      --se cierran los ficheros
+      Close(F_Entrada);
+      --
+      
+      
+      
+      
+      if Tiempo then
+         Put_Line("Combinaciones sin repeticion ha tardado: " & Duration'Image(Clock - Start_Time));
+      end if;
+      return Vector;
+   end recepcionCombinaciones;
+
+
+
+
+
+end iterador;
